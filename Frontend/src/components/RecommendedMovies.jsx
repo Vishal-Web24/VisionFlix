@@ -1,39 +1,74 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 
+const TMDB_API = "https://visionflix.onrender.com/api/tmdb";
 function RecommendedMovies({ movieTitles }) {
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
-    },
-  };
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     accept: "application/json",
+  //     Authorization:
+  //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
+  //   },
+  // };
 
-  fetch(
-    "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1",
-    options
-  )
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((err) => console.error(err));
+  // fetch(
+  //   "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1",
+  //   options
+  // )
+  //   .then((res) => res.json())
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.error(err));
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchMovie = async (title) => {
-    const encodedTitle = encodeURIComponent(title);
-    const url = `https://api.themoviedb.org/3/search/movie?query=${encodedTitle}&include_adult=false&language=en-US&page=1`;
+  // const fetchMovie = async (title) => {
+  //   const encodedTitle = encodeURIComponent(title);
+  //   const url = `https://api.themoviedb.org/3/search/movie?query=${encodedTitle}&include_adult=false&language=en-US&page=1`;
 
+  //   try {
+  //     const res = await fetch(url, options);
+  //     const data = await res.json();
+  //     return data.results?.[0] || null;
+  //   } catch (error) {
+  //     console.log("Error fecthing movies:", error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   const loadMovies = async () => {
+  //     setLoading(true);
+  //     const results = await Promise.all(
+  //       movieTitles.map((title) => fetchMovie(title))
+  //     );
+  //     setMovies(results.filter(Boolean));
+  //     setLoading(false);
+  //   };
+  //   if (movieTitles?.length) {
+  //     loadMovies();
+  //   }
+  // }, [movieTitles]);
+
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+  // console.log(movies);
+
+
+
+ const fetchMovie = async (title) => {
     try {
-      const res = await fetch(url, options);
+      const res = await fetch(
+        `${TMDB_API}/search?query=${encodeURIComponent(title)}`
+      );
       const data = await res.json();
       return data.results?.[0] || null;
     } catch (error) {
-      console.log("Error fecthing movies:", error);
+      console.error("Error fetching movie:", error);
+      return null;
     }
   };
+
   useEffect(() => {
     const loadMovies = async () => {
       setLoading(true);
@@ -43,14 +78,13 @@ function RecommendedMovies({ movieTitles }) {
       setMovies(results.filter(Boolean));
       setLoading(false);
     };
+
     if (movieTitles?.length) {
       loadMovies();
     }
   }, [movieTitles]);
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  console.log(movies);
+
+  if (loading) return <p className="text-white">Loading...</p>;
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 ">
