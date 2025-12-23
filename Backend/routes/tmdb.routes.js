@@ -10,6 +10,31 @@ const headers = {
   Authorization: `Bearer ${process.env.TMDB_BEARER}`,
 };
 
+//  SEARCH MOVIE 
+router.get("/search", async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    if (!query) {
+      return res.status(400).json({ error: "Query is required" });
+    }
+
+    const response = await fetch(
+      `${BASE_URL}/search/movie?query=${encodeURIComponent(
+        query
+      )}&language=en-US&include_adult=false&page=1`,
+      { headers }
+    );
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error("TMDB SEARCH ERROR:", error);
+    res.status(500).json({ error: "Failed to search movie" });
+  }
+});
+
+
 // MOVIE DETAILS
 router.get("/movie/:id", async (req, res) => {
   try {
