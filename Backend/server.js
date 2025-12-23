@@ -7,12 +7,17 @@ import User from "./models/user.model.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import tmdbRoutes from "./routes/tmdb.routes.js";
+
 const app = express();
 
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+
+
+app.use("/api/tmdb", tmdbRoutes);
 
 // app.use(cors({ 
 //   origin: (origin, callback) => {
