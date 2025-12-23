@@ -2,46 +2,73 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { Play } from "lucide-react";
 
+const TMDB_API = "https://visionflix.onrender.com/api/tmdb";
+
+
 function MoviePage() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [recommentations, setRecommentations] = useState([]);
   const [trailerkey, setTrailerkey] = useState(null);
 
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
-    },
-  };
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     accept: "application/json",
+  //     Authorization:
+  //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
+  //   },
+  // };
 
-  useEffect(() => {
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
-      .then((res) => res.json())
-      .then((res) => setMovie(res))
-      .catch((err) => console.error(err));
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=1`,
-      options
-    )
-      .then((res) => res.json())
-      .then((res) => setRecommentations(res.results || []))
-      .catch((err) => console.error(err));
-    fetch(
-      `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
-      options
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        const trailer = res.results?.find(
-          (vid) => vid.site === "YouTube" && vid.type === "Trailer"
-        );
-        setTrailerkey(trailer?.key || null);
-      })
-      .catch((err) => console.error(err));
-  }, [id]);
+  // useEffect(() => {
+  //   fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
+  //     .then((res) => res.json())
+  //     .then((res) => setMovie(res))
+  //     .catch((err) => console.error(err));
+  //   fetch(
+  //     `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=1`,
+  //     options
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => setRecommentations(res.results || []))
+  //     .catch((err) => console.error(err));
+  //   fetch(
+  //     `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+  //     options
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       const trailer = res.results?.find(
+  //         (vid) => vid.site === "YouTube" && vid.type === "Trailer"
+  //       );
+  //       setTrailerkey(trailer?.key || null);
+  //     })
+  //     .catch((err) => console.error(err));
+  // }, [id]);
+
+
+useEffect(() => {
+  fetch(`${TMDB_API}/movie/${id}`)
+    .then(res => res.json())
+    .then(setMovie)
+    .catch(console.error);
+
+  fetch(`${TMDB_API}/movie/${id}/recommendations`)
+    .then(res => res.json())
+    .then(res => setRecommentations(res.results || []))
+    .catch(console.error);
+
+  fetch(`${TMDB_API}/movie/${id}/videos`)
+    .then(res => res.json())
+    .then(res => {
+      const trailer = res.results?.find(
+        vid => vid.site === "YouTube" && vid.type === "Trailer"
+      );
+      setTrailerkey(trailer?.key || null);
+    })
+    .catch(console.error);
+}, [id]);
+
 
   if (!movie) {
     return (

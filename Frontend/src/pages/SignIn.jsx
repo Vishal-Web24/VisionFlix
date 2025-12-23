@@ -66,7 +66,7 @@ function SignIn() {
             New to Visionflix ?
             <span
               onClick={() => navigate("/signup")}
-              className="text-white font-medium curssor-pointer ml-2 hover:underline"
+              className="text-white font-medium cursor-pointer ml-2 hover:underline"
             >
               Sign Up Now
             </span>

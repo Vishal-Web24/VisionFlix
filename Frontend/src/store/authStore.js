@@ -5,7 +5,9 @@ axios.defaults.withCredentials = true;
 
 // const API_URL = "http://localhost:8080/api";
 // const API_URL = "https://visionflix.onrender.com";
-const API_URL = "https://visionflix.onrender.com/api/tmdb";
+const AUTH_API = "https://visionflix.onrender.com/api";
+const TMDB_API = "https://visionflix.onrender.com/api/tmdb";
+
 export const useAuthStore = create((set) => ({
   // intial states
   user: null,
@@ -19,7 +21,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, message: null, error: null });
 
     try {
-      const response = await axios.post(`${API_URL}/signup`, {
+      const response = await axios.post(`${AUTH_API}/signup`, {
         username,
         email,
         password,
@@ -38,7 +40,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, message: null, error: null });
 
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await axios.post(`${AUTH_API}/login`, {
         username,
         password,
       });
@@ -63,7 +65,7 @@ export const useAuthStore = create((set) => ({
   fetchUser: async () => {
     set({ fetchingUser: true, error: null });
     try {
-      const response = await axios.get(`${API_URL}/fetch-user`);
+      const response = await axios.get(`${AUTH_API}/fetch-user`);
       set({ user: response.data.user, fetchingUser: false });
     } catch (error) {
       set({
@@ -77,7 +79,7 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
     set({ isLoading: true, error: null, message: null });
     try {
-      const response = await axios.post(`${API_URL}/logout`);
+      const response = await axios.post(`${AUTH_API}/logout`);
       const { message } = response.data;
       set({
         message,

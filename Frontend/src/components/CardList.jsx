@@ -3,6 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import {Link} from "react-router"
+
+
+const TMDB_API = "https://visionflix.onrender.com/api/tmdb";
+
+
 function CardList({title, category}) {
   const [data, setData] = useState([]);
   //     const movies = [
@@ -48,23 +53,38 @@ function CardList({title, category}) {
   //   },
   // ];
 
-  const options = {
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
-    },
-  };
-  useEffect(() => {
-    fetch(
-      `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`,
-      options
-    )
-      .then((res) => res.json())
-      .then((res) => setData(res.results))
-      .catch((err) => console.error(err));
-  }, []);
+
+  
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     accept: "application/json",
+  //     Authorization:
+  //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkYmE1MzI5MDg4Y2ExNTIwMGQyM2ZhMzdkMjdhNGFmYSIsIm5iZiI6MTc2NjAwMTg4NC4wNzAwMDAyLCJzdWIiOiI2OTQzMGNkYzEzNjY4ODA4NDA1NWUwZGMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.T8i-OJyiqh1NM-mVP826rQxEiVDULizprQaxMxKf1Lk",
+  //   },
+  // };
+
+
+
+
+  // useEffect(() => {
+  //   fetch(
+  //     `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`,
+  //     options
+  //   )
+  //     .then((res) => res.json())
+  //     .then((res) => setData(res.results))
+  //     .catch((err) => console.error(err));
+  // }, []);
+
+
+useEffect(() => {
+  fetch(`${TMDB_API}/category/${category}`)
+    .then((res) => res.json())
+    .then((res) => setData(res.results || []))
+    .catch((err) => console.error(err));
+}, [category]);
+
 
   return (
     <div className="text-white md:px-4 ">
