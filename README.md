@@ -7,6 +7,7 @@ This is a fully functional, fullstack app built with the MERN stack — featurin
 📆 Live Demo: https://visionflix-1.onrender.com
 
 🚀 Features
+
 ✅ Netflix-style UI with responsive layout
 🎨 Real movie data from TMDB API
 🧠 Mood-based AI recommendations using Gemini AI
