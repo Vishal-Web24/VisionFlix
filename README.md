@@ -1,5 +1,5 @@
-# 🎨 Fullstack Entertainment App with AI Movie Recommendations  
-### (MERN Stack 2025)
+# 🎨 Fullstack Entertainment App with AI Movie Recommendations  (MERN Stack 2025)
+
 
 This is a fully functional **fullstack entertainment app** built with the **MERN stack**, featuring **AI-powered movie recommendations** using **Gemini AI**, secure authentication, and a clean, responsive UI powered by real data from the **TMDB API**.
 
